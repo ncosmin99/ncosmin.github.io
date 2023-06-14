@@ -4,4 +4,4 @@ My Personal CV made with `HTML` , `CSS` and pure `JS`
 
 ## 🎥 Live Preview
 
-[ncosmin.github.io](https://ncosmin.github.io)
+[ncosmin99.github.io](https://ncosmin99.github.io/)
