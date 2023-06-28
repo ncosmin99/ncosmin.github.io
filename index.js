@@ -1,4 +1,14 @@
-var activePage = "skills";
+let activePage = "home";
+
+(function start() {
+  const hash = document.location.hash.substring(1);
+  if (hash) {
+    const link = $(`#top-menu-bar a[data-page=${hash}]`);
+    if (link) {
+      activePage = hash;
+    }
+  }
+})();
 
 // utilitis functions
 
@@ -12,42 +22,41 @@ function hide(id) {
 }
 
 function show(id) {
-  var page = $("#" + id);
+  const page = $("#" + id);
   console.info("show %o", id, page);
   page.style.display = "block";
 }
 
 function showPage(id) {
-  var oldLink = $(`#top-menu-bar a[data-page=${activePage}]`);
+  const oldLink = $(`#top-menu-bar a[data-page=${activePage}]`);
   oldLink.classList.remove("active");
 
   hide(activePage);
 
   activePage = id;
 
-  var link = $(`#top-menu-bar a[data-page=${activePage}]`);
+  const link = $(`#top-menu-bar a[data-page=${activePage}]`);
   link.classList.add("active");
 
   show(activePage);
 }
 
 function clickOnMenu(e) {
-  var link = e.target.closest("a");
-  //console.warn("click", link, e.target);
+  const link = e.target.closest("a");
+  // console.warn("click", link, e.target);
   if (link) {
-    var id = link.dataset.page;
-    //console.warn("click %o menu", e.target.getAttribute("data-page"));
-    //console.warn("click %o menu", id, e.target.matches("a"));
-    //console.warn("click %o menu", id);
+    const id = link.dataset.page;
+    // console.warn("click %o menu", e.target.getAttribute("data-page"));
+    // console.warn("click %o menu", id);
     if (id) {
-      //if (e.target.matches("a") & id) {
       showPage(id);
+      document.location.hash = `#${id}`;
     }
   }
 }
 
-function sortByEndorcements(a, b) {
-  return b.endorcements - a.endorcements;
+function sortByEndorsements(a, b) {
+  return b.endorsements - a.endorsements;
 }
 
 function sortByName(a, b) {
@@ -55,29 +64,22 @@ function sortByName(a, b) {
 }
 
 function showSkills(skills) {
-  skills.sort(sortByEndorcements);
-  var htmlSkills = skills.map(function (skill) {
-    //<li class="favorite">HTML</li>
-    console.info("skill", skill);
-    var cls = skill.favorite ? "favorite" : "";
-    return `<li class="${cls}">${skill.name}<span>- ${skill.endorcements}</span></li>`;
+  skills.sort(sortByEndorsements);
+  const htmlSkills = skills.map((skill) => {
+    const cls = skill.favorite ? "favorite" : "";
+    return `<li class="${cls}">
+    ${skill.name}
+    <span> - ${skill.endorsements}</span>
+    </li>`;
   });
-  var ul = $("#skills ul");
+  const ul = $("#skills ul");
   ul.innerHTML = htmlSkills.join("");
 }
 
 function loadSkills() {
-  //console.time("load");
-  var response = fetch("skills.json");
-  var loaded = response.then(function (r) {
-    return r.json();
-  });
-  loaded.then(function (skills) {
-    showSkills(skills);
-    //console.timeEnd("load");
-    //console.warn("ready");
-  });
-  //console.warn("end");
+  const response = fetch("skills.json");
+  const loaded = response.then((r) => r.json());
+  loaded.then(showSkills);
 }
 
 // start our code
