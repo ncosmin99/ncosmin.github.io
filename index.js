@@ -57,6 +57,7 @@ function sortByName(a, b) {
 function showSkills(skills) {
   skills.sort(sortByEndorcements);
   var htmlSkills = skills.map(function (skill) {
+    //<li class="favorite">HTML</li>
     console.info("skill", skill);
     var cls = skill.favorite ? "favorite" : "";
     return `<li class="${cls}">${skill.name} <span>- ${skill.endorcements}</span></li>`;
@@ -67,13 +68,17 @@ function showSkills(skills) {
 }
 
 function loadSkills() {
+  //console.time("load");
   var response = fetch("skills.json");
   var loaded = response.then(function (r) {
     return r.json();
   });
   loaded.then(function (skills) {
     showSkills(skills);
+    //console.timeEnd("load");
+    //console.warn("ready");
   });
+  //console.warn("end");
 }
 
 //HR Skills
@@ -117,7 +122,6 @@ function showTableOfNine() {
     table.style.display = "none";
   }
 }
-
 // start our code
 
 showPage(activePage);
